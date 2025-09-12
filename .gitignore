@@ -1,0 +1,57 @@
+# Pixlet and Tidbyt development files
+*.webp
+*.gif
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Cache directories
+.cache/
+cache/
+
+# Temporary files
+tmp/
+temp/
+
+# API keys and secrets (if you use external config files)
+secrets.json
+config.json
+api_keys.txt
+
+# Build artifacts
+build/
+dist/
+
+# Node modules (if using any JavaScript tooling)
+node_modules/
+
+# Python virtual environments (if using Python tools)
+venv/
+env/
+.venv/
+
+# Backup files
+*.bak
+*.backup
