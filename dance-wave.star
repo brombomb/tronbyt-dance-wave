@@ -2,12 +2,12 @@
 Dance Wave - A Tidbyt app showing the currently playing song from Dance Wave Online Radio
 """
 
-load("render.star", "render")
-load("http.star", "http")
 load("cache.star", "cache")
-load("schema.star", "schema")
-load("encoding/json.star", "json")
 load("encoding/base64.star", "base64")
+load("encoding/json.star", "json")
+load("http.star", "http")
+load("render.star", "render")
+load("schema.star", "schema")
 
 # Dance Wave Logo
 DW_LOGO = base64.decode("""
@@ -15,12 +15,13 @@ R0lGODlhQABAAPcAAAAAAAz7rg/6shD5tRb2vhr2vweD/wiF/wyL/xGS/xSY/xme/x2j/yOs/yey/ym1
 """)
 
 # Cache TTL for API responses
-CACHE_TTL_SECONDS = 120  # Cache for 2 minutes (more frequent updates for live radio)
+CACHE_TTL_SECONDS = 30  # Cache for 30 seconds (more frequent updates for live radio)
 
 def main(config):
     """
     Main function that renders the Tidbyt display
     """
+
     # Get user-configured colors
     text_color = config.get("text_color", "#0ff1b2")
 
@@ -119,18 +120,20 @@ def fetch_current_track():
     if cached != None:
         return json.decode(cached)
 
-    resp = http.get(url, headers=headers)
+    resp = http.get(url, headers = headers)
 
     if resp.status_code == 200:
         data = resp.json()
+
         # Extract the current track (first item in playlist)
-        if data.get("mscp", {}).get("playlist") and len(data["mscp"]["playlist"]) > 0:
-            current = data["mscp"]["playlist"][0]
+        playlist = data.get("mscp", {}).get("playlist")
+        if playlist:
+            current = playlist[0]
             track_data = {
                 "artist": current.get("artist", "Unknown Artist"),
                 "title": current.get("title", "Unknown Title"),
             }
-            cache.set("current_track", json.encode(track_data), ttl_seconds=30)
+            cache.set("current_track", json.encode(track_data), ttl_seconds = CACHE_TTL_SECONDS)
             return track_data
         else:
             print("No playlist data found")
